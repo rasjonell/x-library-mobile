@@ -5,7 +5,7 @@ export const useSignIn = () => {
   const { PublicAPI } = useAxios();
   const auth = useAuth();
 
-  return async (email: string, password: string) => {
+  return async ({ email, password }: { email: string; password: string }) => {
     try {
       const data = await PublicAPI.post('/users/signin', {
         user: {

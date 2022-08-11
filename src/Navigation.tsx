@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Text } from 'react-native';
+import { Text, Button } from 'native-base';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -8,12 +8,15 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useAuth } from './context/Auth';
 import { useSignIn } from './api/auth';
 
+import { SignIn } from './screens/auth/SignIn';
+import { SignUp } from './screens/auth/SignUp';
+
 function ComponentBuilder() {
   const auth = useAuth();
   const signIn = useSignIn();
 
   const handleSignIn = async () => {
-    signIn('test@example.com', 'strong_pass');
+    signIn({ email: 'test@example.com', password: 'strong_passs' });
   };
 
   return (
@@ -25,7 +28,9 @@ function ComponentBuilder() {
       }}>
       <Text>{Math.random()}</Text>
       <Text>{auth.authState.authenticated ? 'yes' : 'no'}</Text>
-      <Button onPress={handleSignIn} title="toggle auth state" />
+      <Button borderRadius="full" colorScheme="success" onPress={handleSignIn}>
+        Log Out
+      </Button>
     </SafeAreaView>
   );
 }
@@ -43,9 +48,9 @@ const MainNavigator = () => (
 const AuthNavigator = () => (
   <Stack.Navigator
     initialRouteName="Sign In"
-    screenOptions={{ headerShown: false }}>
-    <Stack.Screen name="Sign In" component={ComponentBuilder} />
-    <Stack.Screen name="Sign Up" component={ComponentBuilder} />
+    screenOptions={{ headerShown: true }}>
+    <Stack.Screen name="Sign In" component={SignIn} />
+    <Stack.Screen name="Sign Up" component={SignUp} />
   </Stack.Navigator>
 );
 

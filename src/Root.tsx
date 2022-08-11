@@ -1,4 +1,5 @@
 import React from 'react';
+import { NativeBaseProvider } from 'native-base';
 import { NavigationContainer } from '@react-navigation/native';
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
 
@@ -13,9 +14,11 @@ const Root = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
       <AxiosProvider>
-        <NavigationContainer>
-          <App />
-        </NavigationContainer>
+        <NativeBaseProvider>
+          <NavigationContainer>
+            <App />
+          </NavigationContainer>
+        </NativeBaseProvider>
       </AxiosProvider>
     </AuthProvider>
   </QueryClientProvider>
