@@ -1,6 +1,6 @@
 import React, { createContext, PropsWithChildren, useContext } from 'react';
 
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import * as Keychain from 'react-native-keychain';
 import createAuthRefreshInterceptor from 'axios-auth-refresh';
 
@@ -29,6 +29,22 @@ const AxiosProvider = ({ children }: PropsWithChildren) => {
     baseURL: BASE_URL,
   });
 
+  const unauthorizedInterceptors = [
+    (response: AxiosResponse) => {
+      return response;
+    },
+    (error: any) => {
+      if (error.response.status === 401) {
+        authContext.setAuthState({
+          accessToken: null,
+          refreshToken: null,
+          authenticated: false,
+        });
+      }
+      return error;
+    },
+  ];
+
   AuthAPI.interceptors.request.use(
     config => {
       const accessToken = authContext.authState.accessToken;
@@ -41,6 +57,9 @@ const AxiosProvider = ({ children }: PropsWithChildren) => {
     },
     error => Promise.reject(error),
   );
+
+  AuthAPI.interceptors.response.use(...unauthorizedInterceptors);
+  PublicAPI.interceptors.response.use(...unauthorizedInterceptors);
 
   const refreshAuthLogic = async (failedRequest: any) => {
     console.log(failedRequest);

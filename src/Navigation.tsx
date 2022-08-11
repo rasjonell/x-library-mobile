@@ -1,14 +1,20 @@
 import React from 'react';
+import { Button, Text } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Button, Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { useAuth } from './context/Auth';
+import { useSignIn } from './api/auth';
 
 function ComponentBuilder() {
-  const { setAuthState } = useAuth();
+  const auth = useAuth();
+  const signIn = useSignIn();
+
+  const handleSignIn = async () => {
+    signIn('test@example.com', 'strong_pass');
+  };
 
   return (
     <SafeAreaView
@@ -18,15 +24,8 @@ function ComponentBuilder() {
         justifyContent: 'center',
       }}>
       <Text>{Math.random()}</Text>
-      <Button
-        title="toggle auth state"
-        onPress={() => {
-          setAuthState(state => ({
-            ...state,
-            authenticated: !state.authenticated,
-          }));
-        }}
-      />
+      <Text>{auth.authState.authenticated ? 'yes' : 'no'}</Text>
+      <Button onPress={handleSignIn} title="toggle auth state" />
     </SafeAreaView>
   );
 }
