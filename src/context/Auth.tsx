@@ -23,11 +23,10 @@ interface IAuthState {
   refreshToken: string | null;
 }
 
-interface IAuthContext {
+export interface IAuthContext {
   authState: IAuthState;
   logout: () => void;
   setAuthState: React.Dispatch<React.SetStateAction<IAuthState>>;
-  loading: boolean;
 }
 
 export const defaultAuthState: IAuthState = {
@@ -38,7 +37,6 @@ export const defaultAuthState: IAuthState = {
 };
 
 export const AuthContext = createContext<IAuthContext>({
-  loading: false,
   logout: () => {},
   setAuthState: () => {},
   authState: defaultAuthState,
@@ -73,7 +71,6 @@ const AuthProvider = ({ children }: PropsWithChildren) => {
         logout,
         authState,
         setAuthState,
-        loading: false,
       }}>
       {children}
     </AuthContext.Provider>
