@@ -62,10 +62,10 @@ const AxiosProvider = ({ children }: PropsWithChildren) => {
   PublicAPI.interceptors.response.use(...unauthorizedInterceptors);
 
   const refreshAuthLogic = async (failedRequest: any) => {
-    console.log(failedRequest);
+    console.log('FAILED REQUEST', failedRequest);
 
     const data = {
-      refreshToken: authContext.authState.refreshToken,
+      refresh: authContext.authState.refreshToken,
     };
 
     const options = {
@@ -80,19 +80,21 @@ const AxiosProvider = ({ children }: PropsWithChildren) => {
         response.config.headers = {};
       }
 
-      const accessToken = response.data.accessToken;
+      const accessToken = response.data.token;
+      const refreshToken = response.data.refresh;
       response.config.headers.Authorization = `Bearer ${accessToken}`;
 
       authContext.setAuthState({
-        ...authContext.authState,
         accessToken,
+        refreshToken,
+        authenticated: true,
       });
 
       return await Keychain.setGenericPassword(
         'token',
         JSON.stringify({
           accessToken,
-          refreshToken: authContext.authState.refreshToken,
+          refreshToken,
         }),
       );
     } catch (error) {

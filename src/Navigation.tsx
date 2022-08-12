@@ -6,18 +6,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { useAuth } from './context/Auth';
-import { useSignIn } from './api/auth';
+import { useSignOut } from './api/auth';
 
 import { SignIn } from './screens/auth/SignIn';
 import { SignUp } from './screens/auth/SignUp';
 
 function ComponentBuilder() {
   const auth = useAuth();
-  const signIn = useSignIn();
-
-  const handleSignIn = async () => {
-    signIn({ email: 'test@example.com', password: 'strong_passs' });
-  };
+  const signOut = useSignOut();
 
   return (
     <SafeAreaView
@@ -28,7 +24,7 @@ function ComponentBuilder() {
       }}>
       <Text>{Math.random()}</Text>
       <Text>{auth.authState.authenticated ? 'yes' : 'no'}</Text>
-      <Button borderRadius="full" colorScheme="success" onPress={handleSignIn}>
+      <Button borderRadius="full" colorScheme="success" onPress={signOut}>
         Log Out
       </Button>
     </SafeAreaView>
