@@ -2,18 +2,16 @@ import { Button, Text, VStack } from 'native-base';
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useSignOut } from '../../api/auth';
-// import { useUserReviews } from '../../api/library';
 import { useAuth } from '../../context/Auth';
 
 function Profile() {
   const {
-    loading,
     authState: { user },
   } = useAuth();
 
   const signOut = useSignOut();
 
-  if (loading || !user) {
+  if (!user) {
     return (
       <SafeAreaView>
         <Text>Loading ...</Text>
