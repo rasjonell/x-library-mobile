@@ -4,7 +4,8 @@ import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import * as Keychain from 'react-native-keychain';
 import createAuthRefreshInterceptor from 'axios-auth-refresh';
 
-import { AuthContext } from './Auth';
+import { AuthContext, defaultAuthState } from './Auth';
+import { userFromResponse } from '../api/auth';
 
 const BASE_URL = 'http://localhost:4000/api';
 
@@ -35,11 +36,7 @@ const AxiosProvider = ({ children }: PropsWithChildren) => {
     },
     (error: any) => {
       if (error.response.status === 401) {
-        authContext.setAuthState({
-          accessToken: null,
-          refreshToken: null,
-          authenticated: false,
-        });
+        authContext.setAuthState(defaultAuthState);
       }
       return error;
     },
@@ -83,8 +80,10 @@ const AxiosProvider = ({ children }: PropsWithChildren) => {
       const accessToken = response.data.token;
       const refreshToken = response.data.refresh;
       response.config.headers.Authorization = `Bearer ${accessToken}`;
+      const user = userFromResponse(response);
 
       authContext.setAuthState({
+        user,
         accessToken,
         refreshToken,
         authenticated: true,
@@ -98,11 +97,7 @@ const AxiosProvider = ({ children }: PropsWithChildren) => {
         }),
       );
     } catch (error) {
-      authContext.setAuthState({
-        accessToken: null,
-        refreshToken: null,
-        authenticated: false,
-      });
+      authContext.setAuthState(defaultAuthState);
     }
   };
 
