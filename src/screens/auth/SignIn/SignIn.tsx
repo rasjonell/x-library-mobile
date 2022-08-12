@@ -1,15 +1,31 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { Button, Input, Link, Text, VStack } from 'native-base';
+import {
+  Button,
+  FormControl,
+  Input,
+  Link,
+  Text,
+  VStack,
+  WarningOutlineIcon,
+} from 'native-base';
 import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useSignIn } from '../../../api/auth';
+import formValidator, { IFormErrorState } from '../helpers/formValidator';
+
+const defaultErrorState = {
+  email: null,
+  password: null,
+};
 
 function SignIn() {
   const signIn = useSignIn();
   const navigator = useNavigation<NativeStackNavigationProp<any>>();
   const [show, setShow] = useState(false);
+  const [errorState, setErrorState] =
+    useState<IFormErrorState>(defaultErrorState);
   const [formState, setFormState] = useState({ email: '', password: '' });
 
   const handleFormChange = (name: string) => (value: string) => {
@@ -17,7 +33,12 @@ function SignIn() {
   };
 
   const handleSignIn = () => {
-    signIn(formState);
+    const errors = formValidator(formState);
+    if (Object.values(errors).some(value => !!value)) {
+      setErrorState(errors);
+    } else {
+      signIn(formState);
+    }
   };
 
   const handleShow = () => {
@@ -31,36 +52,50 @@ function SignIn() {
   return (
     <SafeAreaView>
       <VStack paddingX={10} mt={3} h="90%" justifyContent="center">
-        <Input
-          mb={3}
-          size="lg"
-          variant="rounded"
-          autoCapitalize="none"
-          value={formState.email}
-          placeholder="Enter your email"
-          onChangeText={handleFormChange('email')}
-        />
+        <FormControl isRequired isInvalid={!!errorState.email}>
+          <Input
+            size="lg"
+            variant="rounded"
+            autoCapitalize="none"
+            value={formState.email}
+            mb={errorState.email ? 0 : 3}
+            placeholder="Enter your email"
+            onChangeText={handleFormChange('email')}
+          />
+          <FormControl.ErrorMessage
+            mb={3}
+            leftIcon={<WarningOutlineIcon size="xs" />}>
+            {errorState.email}
+          </FormControl.ErrorMessage>
+        </FormControl>
 
-        <Input
-          mb={5}
-          size="lg"
-          variant="rounded"
-          autoCapitalize="none"
-          value={formState.password}
-          type={show ? 'text' : 'password'}
-          placeholder="Enter your password"
-          onChangeText={handleFormChange('password')}
-          InputRightElement={
-            <Button
-              w="1/6"
-              h="full"
-              size="xs"
-              rounded="none"
-              onPress={handleShow}>
-              {show ? 'Hide' : 'Show'}
-            </Button>
-          }
-        />
+        <FormControl isRequired isInvalid={!!errorState.password}>
+          <Input
+            size="lg"
+            variant="rounded"
+            autoCapitalize="none"
+            value={formState.password}
+            mb={errorState.password ? 0 : 5}
+            type={show ? 'text' : 'password'}
+            placeholder="Enter your password"
+            onChangeText={handleFormChange('password')}
+            InputRightElement={
+              <Button
+                w="1/6"
+                h="full"
+                size="xs"
+                rounded="none"
+                onPress={handleShow}>
+                {show ? 'Hide' : 'Show'}
+              </Button>
+            }
+          />
+          <FormControl.ErrorMessage
+            mb={5}
+            leftIcon={<WarningOutlineIcon size="xs" />}>
+            {errorState.password}
+          </FormControl.ErrorMessage>
+        </FormControl>
 
         <Button borderRadius="full" onPress={handleSignIn}>
           Sign In
