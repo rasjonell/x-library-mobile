@@ -2,12 +2,14 @@ interface IFormState {
   email: string;
   password: string;
   name?: string;
+  bio?: string;
 }
 
 export interface IFormErrorState {
   email: null | string;
   password: null | string;
   name?: null | string;
+  bio?: null | string;
 }
 
 export function isEmailValid(email: IFormState['email']): boolean {
@@ -19,22 +21,25 @@ export function isEmailValid(email: IFormState['email']): boolean {
 }
 
 export function isPasswordValid(password: IFormState['password']): boolean {
-  if (password.length < 6) {
-    return false;
-  }
-
-  return true;
+  return password.length >= 6;
 }
 
 export function isNameValid(name: Required<IFormState>['name']): boolean {
-  if (name.length < 2) {
-    return false;
-  }
-
-  return true;
+  return name.length > 2;
 }
 
-export default function formValidator({ email, password, name }: IFormState) {
+export function isBioValid(bio: Required<IFormState>['bio']): boolean {
+  const trim = bio.trim();
+  return trim.length >= 3 && trim.length <= 150;
+}
+
+export default function formValidator({
+  bio,
+  name,
+  email,
+  password,
+}: IFormState) {
+  const withBio = typeof bio === 'string';
   const withName = typeof name === 'string';
 
   return {
@@ -43,6 +48,11 @@ export default function formValidator({ email, password, name }: IFormState) {
       ? isNameValid(name)
         ? null
         : 'Must be at least 2 characters long'
+      : undefined,
+    bio: withBio
+      ? isBioValid(bio)
+        ? null
+        : 'Your bio must be between 3 and 150 characters long'
       : undefined,
     password: isPasswordValid(password)
       ? null

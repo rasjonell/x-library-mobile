@@ -8,14 +8,16 @@ import {
   Button,
   FormControl,
   WarningOutlineIcon,
+  TextArea,
 } from 'native-base';
 import React, { useState } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useSignUp } from '../../../api/auth';
+import { SafeAreaView } from '../../../components/SafeAreaView';
 
 import formValidator, { IFormErrorState } from '../helpers/formValidator';
 
 const defaultErrorState: IFormErrorState = {
+  bio: null,
   name: null,
   email: null,
   password: null,
@@ -27,6 +29,7 @@ function SignUp() {
   const signUp = useSignUp();
   const [show, setShow] = useState(false);
   const [formState, setFormState] = useState({
+    bio: '',
     name: '',
     email: '',
     password: '',
@@ -35,9 +38,10 @@ function SignUp() {
   const [errorState, setErrorState] =
     useState<IFormErrorState>(defaultErrorState);
 
-  const handleFormChange = (name: string) => (value: string) => {
-    setFormState({ ...formState, [name]: value });
-  };
+  const handleFormChange =
+    (name: keyof typeof formState) => (value: string) => {
+      setFormState({ ...formState, [name]: value });
+    };
 
   const handleSignUp = () => {
     const errors = formValidator(formState);
@@ -75,6 +79,25 @@ function SignUp() {
             mb={3}
             leftIcon={<WarningOutlineIcon size="xs" />}>
             {errorState.name}
+          </FormControl.ErrorMessage>
+        </FormControl>
+
+        <FormControl isRequired isInvalid={!!errorState.bio}>
+          <FormControl.Label>Your Bio</FormControl.Label>
+          <TextArea
+            size="lg"
+            isRequired
+            borderRadius="2xl"
+            autoCapitalize="none"
+            value={formState.bio}
+            autoCompleteType="off"
+            placeholder="Tell us about yourself"
+            onChangeText={handleFormChange('bio')}
+          />
+          <FormControl.ErrorMessage
+            mb={3}
+            leftIcon={<WarningOutlineIcon size="xs" />}>
+            {errorState.bio}
           </FormControl.ErrorMessage>
         </FormControl>
 
