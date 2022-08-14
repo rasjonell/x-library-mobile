@@ -39,6 +39,7 @@ function SignIn() {
     if (Object.values(errors).some(value => !!value)) {
       setErrorState(errors);
     } else {
+      setErrorState(defaultErrorState);
       signIn(formState);
     }
   };
@@ -53,7 +54,7 @@ function SignIn() {
 
   return (
     <SafeAreaView>
-      <VStack paddingX={10} mt={3} h="90%" justifyContent="center">
+      <VStack paddingX={10} mt={3} h="100%" justifyContent="center">
         <FormControl isRequired isInvalid={!!errorState.email}>
           <Input
             size="lg"
