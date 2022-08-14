@@ -59,7 +59,7 @@ const AxiosProvider = ({ children }: PropsWithChildren) => {
   PublicAPI.interceptors.response.use(...unauthorizedInterceptors);
 
   const refreshAuthLogic = async (failedRequest: any) => {
-    console.log('FAILED REQUEST', failedRequest);
+    console.warn('FAILED REQUEST', failedRequest);
 
     const data = {
       refresh: authContext.authState.refreshToken,

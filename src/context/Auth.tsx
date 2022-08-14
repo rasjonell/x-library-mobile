@@ -9,6 +9,7 @@ import * as Keychain from 'react-native-keychain';
 
 export interface IUser {
   id: string;
+  bio: string;
   name: string;
   email: string;
 
@@ -24,8 +25,8 @@ interface IAuthState {
 }
 
 export interface IAuthContext {
-  authState: IAuthState;
   logout: () => void;
+  authState: IAuthState;
   setAuthState: React.Dispatch<React.SetStateAction<IAuthState>>;
 }
 

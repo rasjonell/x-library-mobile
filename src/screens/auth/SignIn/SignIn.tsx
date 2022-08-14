@@ -10,9 +10,9 @@ import {
   WarningOutlineIcon,
 } from 'native-base';
 import React, { useState } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useSignIn } from '../../../api/auth';
+import { SafeAreaView } from '../../../components/SafeAreaView';
 import formValidator, { IFormErrorState } from '../helpers/formValidator';
 
 const defaultErrorState = {
@@ -23,9 +23,11 @@ const defaultErrorState = {
 function SignIn() {
   const signIn = useSignIn();
   const navigator = useNavigation<NativeStackNavigationProp<any>>();
+
   const [show, setShow] = useState(false);
   const [errorState, setErrorState] =
     useState<IFormErrorState>(defaultErrorState);
+
   const [formState, setFormState] = useState({ email: '', password: '' });
 
   const handleFormChange = (name: string) => (value: string) => {
