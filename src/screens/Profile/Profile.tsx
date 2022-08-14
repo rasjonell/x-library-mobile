@@ -1,8 +1,12 @@
-import { Button, Text, VStack } from 'native-base';
+import { Button, Flex, Text, VStack } from 'native-base';
 import React from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
+
 import { useSignOut } from '../../api/auth';
 import { useAuth } from '../../context/Auth';
+
+import { Stats } from '../../components/Stats';
+import { Avatar } from '../../components/Avatar';
+import { SafeAreaView } from '../../components/SafeAreaView';
 
 function Profile() {
   const {
@@ -21,14 +25,25 @@ function Profile() {
 
   return (
     <SafeAreaView>
-      <VStack paddingX={10} mt={3}>
-        <Text>
-          {user.name}
-          {user.email}
-          read {user.booksRead?.length} books and added {user.reviews?.length}{' '}
-          reviews
-        </Text>
-        <Button onPress={signOut}>Sign Out</Button>
+      <VStack
+        h="full"
+        paddingY={5}
+        paddingX={10}
+        alignItems="center"
+        justifyContent="space-between">
+        <Flex direction="column" alignItems="center">
+          <Avatar seed={user.name} />
+          <Text fontWeight="extrabold" fontSize="3xl" mt={3}>
+            {user.name}
+          </Text>
+          <Text fontWeight="light" fontSize="lg" textAlign="center">
+            {user.bio}
+          </Text>
+          <Stats user={user} />
+        </Flex>
+        <Button onPress={signOut} w="full">
+          <Text color="muted.100">Sign Out</Text>
+        </Button>
       </VStack>
     </SafeAreaView>
   );

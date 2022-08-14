@@ -5,10 +5,18 @@ import { useAxios } from '../context/Axios';
 import { IAuthContext, IUser, useAuth } from '../context/Auth';
 
 export function userFromResponse(response: AxiosResponse): IUser {
-  const { id, name, email, reviews, books_read: booksRead } = response.data;
+  const {
+    id,
+    bio,
+    name,
+    email,
+    reviews,
+    books_read: booksRead,
+  } = response.data;
 
   return {
     id,
+    bio,
     name,
     email,
     reviews,
