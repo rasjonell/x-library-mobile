@@ -1,13 +1,13 @@
 import React, { createContext, PropsWithChildren, useContext } from 'react';
 
-import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import * as Keychain from 'react-native-keychain';
+import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import createAuthRefreshInterceptor from 'axios-auth-refresh';
+
+import { SERVER_URL as BASE_URL } from '@env';
 
 import { AuthContext, defaultAuthState } from './Auth';
 import { userFromResponse } from '../api/auth';
-
-const BASE_URL = 'http://localhost:4000/api';
 
 interface IAxiosContext {
   AuthAPI: AxiosInstance;
