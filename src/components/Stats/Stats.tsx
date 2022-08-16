@@ -2,10 +2,8 @@ import React, { ReactNode } from 'react';
 import { Text, Flex, Divider, Icon } from 'native-base';
 import AntIcons from 'react-native-vector-icons/AntDesign';
 
-import { IUser } from '../../context/Auth';
-
 interface StatsProps {
-  user: IUser;
+  user: Models.User;
 }
 
 interface IndividualStatProps {
@@ -37,11 +35,16 @@ const IndividualStat = ({ label, value }: IndividualStatProps) => (
   </Flex>
 );
 
-const RatingStat = ({ userReviews }: { userReviews: IUser['reviews'] }) => {
-  const averageRating = userReviews
-    ? userReviews.reduce((prev, curr) => prev + curr.rating, 0) /
-      userReviews.length
-    : 0;
+const RatingStat = ({
+  userReviews,
+}: {
+  userReviews: Models.User['reviews'];
+}) => {
+  const averageRating =
+    userReviews && userReviews.length > 0
+      ? userReviews.reduce((prev, curr) => prev + curr.rating, 0) /
+        userReviews.length
+      : 0;
 
   return (
     <IndividualStat
