@@ -1,18 +1,18 @@
-import { Button, Flex, Text, VStack } from 'native-base';
 import React from 'react';
+import { Flex, ScrollView, Text, VStack } from 'native-base';
 
-import { useSignOut } from '../../api/auth';
 import { useAuth } from '../../context/Auth';
 
+import { Books } from '../../components/Books';
 import { Stats } from '../../components/Stats';
 import { Avatar } from '../../components/Avatar';
 import { SafeAreaView } from '../../components/SafeAreaView';
+import { useSignOut } from '../../api/auth';
 
 function Profile() {
   const {
     authState: { user },
   } = useAuth();
-
   const signOut = useSignOut();
 
   if (!user) {
@@ -23,16 +23,25 @@ function Profile() {
     );
   }
 
+  const hasBooks = user.booksRead && user.booksRead.length > 0;
+
   return (
     <SafeAreaView>
-      <VStack
-        h="full"
-        paddingY={5}
-        paddingX={10}
-        alignItems="center"
-        justifyContent="space-between">
-        <Flex direction="column" alignItems="center">
-          <Avatar seed={user.name} />
+      <VStack px={5} pb={5}>
+        <Flex
+          h="full"
+          direction="column"
+          alignItems="center"
+          justifyContent="space-between">
+          <Avatar
+            seed={user.name}
+            action={{
+              onPress: signOut,
+              title: 'Sign Out',
+              iconName: 'logout',
+              message: 'Are you sure you want to sign out?',
+            }}
+          />
           <Text fontWeight="extrabold" fontSize="3xl" mt={3}>
             {user.name}
           </Text>
@@ -40,10 +49,24 @@ function Profile() {
             {user.bio}
           </Text>
           <Stats user={user} />
+          <ScrollView>
+            {user.booksRead && hasBooks ? (
+              <Books books={user.booksRead} />
+            ) : (
+              <Flex direction="column">
+                <Text fontWeight="extrabold" fontSize="xl" textAlign="left">
+                  Your Books
+                </Text>
+                <Text fontWeight="light">
+                  You currently don't have any books in your Library.
+                </Text>
+                <Text fontWeight="light">
+                  When you add books to your library, they will appear here.
+                </Text>
+              </Flex>
+            )}
+          </ScrollView>
         </Flex>
-        <Button onPress={signOut} w="full">
-          <Text color="muted.100">Sign Out</Text>
-        </Button>
       </VStack>
     </SafeAreaView>
   );
