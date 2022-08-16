@@ -7,18 +7,8 @@ import React, {
 } from 'react';
 import * as Keychain from 'react-native-keychain';
 
-export interface IUser {
-  id: string;
-  bio: string;
-  name: string;
-  email: string;
-
-  // Associations
-  reviews?: Array<any>;
-  booksRead?: Array<any>;
-}
 interface IAuthState {
-  user: IUser | null;
+  user: Models.User | null;
   authenticated: boolean;
   accessToken: string | null;
   refreshToken: string | null;

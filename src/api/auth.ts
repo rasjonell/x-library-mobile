@@ -2,10 +2,10 @@ import { AxiosResponse } from 'axios';
 import * as Keychain from 'react-native-keychain';
 
 import { useAxios } from '../context/Axios';
-import { IAuthContext, IUser, useAuth } from '../context/Auth';
+import { IAuthContext, useAuth } from '../context/Auth';
 import useToast from '../hooks/useToast';
 
-export function userFromResponse(response: AxiosResponse): IUser {
+export function userFromResponse(response: AxiosResponse): Models.User {
   const {
     id,
     bio,
