@@ -4,12 +4,15 @@ import { useToast as useNativeToast } from 'native-base';
 import { ToastAlert } from '../components/ToastAlert';
 import { ToastAlertProps } from '../components/ToastAlert/ToastAlert';
 
-export default function useToast() {
+export default function useToast(id: string) {
   const toast = useNativeToast();
 
-  return (props: Omit<ToastAlertProps, 'id'>) => {
-    toast.show({
-      render: ({ id }) => <ToastAlert {...props} id={id} />,
-    });
+  return (props: Omit<ToastAlertProps, 'onClose'>) => {
+    if (!toast.isActive(id)) {
+      toast.show({
+        id,
+        render: () => <ToastAlert {...props} onClose={() => toast.close(id)} />,
+      });
+    }
   };
 }
