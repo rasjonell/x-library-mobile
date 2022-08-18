@@ -1,11 +1,11 @@
 import React from 'react';
+import { Alert } from 'react-native';
 import { HStack, Icon, Text } from 'native-base';
 import AntIcons from 'react-native-vector-icons/AntDesign';
 
 import { Card } from '../Card';
 
 import truncate from '../helpers/truncate';
-import { Alert } from 'react-native';
 
 interface BookProps {
   book: Models.Book;
@@ -58,11 +58,11 @@ const Book = ({ book }: BookProps) => {
   return (
     <Card
       clickable
-      onPress={onBookPress}
       title={title}
       subtitle={subtitle}
-      description={description}
+      onPress={onBookPress}
       leftAction={leftAction}
+      description={description}
       rightAction={rightAction}
     />
   );

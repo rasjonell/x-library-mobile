@@ -43,9 +43,9 @@ async function updateAuthState(auth: IAuthContext, response: AxiosResponse) {
 }
 
 export const useSignIn = () => {
-  const { PublicAPI } = useAxios();
   const auth = useAuth();
   const toast = useToast('auth');
+  const { PublicAPI } = useAxios();
 
   return async ({
     email,
@@ -73,8 +73,6 @@ export const useSignIn = () => {
           description: 'Enjoy Your Experience with X-Library',
         });
       }
-
-      return null;
     } catch (error) {
       toast({
         status: 'error',
@@ -87,15 +85,21 @@ export const useSignIn = () => {
 
       return error as XLibError;
     }
+
+    return null;
   };
 };
 
 export const useSignUp = () => {
-  const { PublicAPI } = useAxios();
   const auth = useAuth();
   const toast = useToast('auth');
+  const { PublicAPI } = useAxios();
 
-  return async (user: { name: string; email: string; password: string }) => {
+  return async (user: {
+    name: string;
+    email: string;
+    password: string;
+  }): Promise<XLibError | null> => {
     try {
       const response = await PublicAPI.post('/users/signup', {
         user,
@@ -126,13 +130,15 @@ export const useSignUp = () => {
         description: 'Unable To Sign You Up. Please Try Again',
       });
     }
+
+    return null;
   };
 };
 
 export const useSignOut = () => {
-  const { AuthAPI } = useAxios();
   const auth = useAuth();
   const toast = useToast('auth');
+  const { AuthAPI } = useAxios();
 
   return async () => {
     try {

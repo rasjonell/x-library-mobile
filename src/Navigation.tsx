@@ -7,9 +7,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { useAuth } from './context/Auth';
 
+import { Profile } from './screens/Profile';
 import { SignIn } from './screens/auth/SignIn';
 import { SignUp } from './screens/auth/SignUp';
-import { Profile } from './screens/Profile';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();

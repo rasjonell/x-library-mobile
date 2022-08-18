@@ -3,6 +3,8 @@ declare namespace Models {
     id: string;
     rating: number;
     content: string;
+
+    // Associations
     book_id: Book['id'];
     user_id: User['id'];
   }

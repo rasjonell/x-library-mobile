@@ -1,8 +1,8 @@
-import React, { PropsWithChildren } from 'react';
+import React from 'react';
 import { StyleSheet } from 'react-native';
 import { SafeAreaView as SafeView } from 'react-native-safe-area-context';
 
-const SafeAreaView = ({ children }: PropsWithChildren) => (
+const SafeAreaView = ({ children }: React.PropsWithChildren) => (
   <SafeView style={styles.main}>{children}</SafeView>
 );
 

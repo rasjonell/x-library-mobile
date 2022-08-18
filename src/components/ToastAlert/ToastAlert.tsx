@@ -1,4 +1,5 @@
 import React from 'react';
+import { InterfaceAlertProps } from 'native-base/lib/typescript/components/composites/Alert/types';
 import {
   Text,
   Alert,
@@ -7,15 +8,14 @@ import {
   CloseIcon,
   IconButton,
 } from 'native-base';
-import { InterfaceAlertProps } from 'native-base/lib/typescript/components/composites/Alert/types';
 
 export interface ToastAlertProps {
   title: string;
+  onClose: () => void;
   description: string;
   isClosable: boolean;
   status: InterfaceAlertProps['status'];
   variant: InterfaceAlertProps['variant'];
-  onClose: () => void;
 }
 
 const ToastAlert = ({
@@ -29,17 +29,17 @@ const ToastAlert = ({
   <Alert
     status={status}
     maxWidth="100%"
+    variant={variant}
     alignSelf="center"
-    flexDirection="row"
-    variant={variant}>
+    flexDirection="row">
     <VStack space={1} flexShrink={1} w="100%">
       <HStack flexShrink={1} alignItems="center" justifyContent="space-between">
         <HStack space={2} flexShrink={1} alignItems="center">
           <Alert.Icon />
           <Text
+            flexShrink={1}
             fontSize="md"
             fontWeight="medium"
-            flexShrink={1}
             color={
               variant === 'solid'
                 ? 'lightText'
@@ -52,12 +52,12 @@ const ToastAlert = ({
         </HStack>
         {isClosable ? (
           <IconButton
+            onPress={onClose}
             variant="unstyled"
             icon={<CloseIcon size="3" />}
             _icon={{
               color: variant === 'solid' ? 'lightText' : 'darkText',
             }}
-            onPress={onClose}
           />
         ) : null}
       </HStack>

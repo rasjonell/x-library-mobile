@@ -1,9 +1,9 @@
 import React from 'react';
+import { Alert } from 'react-native';
 import { Avatar as NBAvatar, Icon } from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 import { AVATAR_API_KEY } from '@env';
-import { Alert } from 'react-native';
 
 interface AvatarProps {
   seed: string;

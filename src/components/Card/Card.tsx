@@ -11,8 +11,8 @@ interface DefaultCardProps {
 }
 
 interface InactiveCardProps extends DefaultCardProps {
-  clickable?: false;
   onPress?: never;
+  clickable: false;
 }
 
 interface ActionableCardProps extends DefaultCardProps {
@@ -24,12 +24,12 @@ function Card(props: InactiveCardProps): JSX.Element;
 function Card(props: ActionableCardProps): JSX.Element;
 function Card({
   title,
+  onPress,
   subtitle,
   leftAction,
   rightAction,
   description,
   clickable = false,
-  onPress,
 }: InactiveCardProps | ActionableCardProps): JSX.Element {
   const CardContent = (
     <Box alignItems="center" m={3}>

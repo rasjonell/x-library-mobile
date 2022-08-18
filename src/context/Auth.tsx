@@ -1,15 +1,15 @@
+import * as Keychain from 'react-native-keychain';
 import React, {
   useState,
+  useEffect,
   useContext,
   createContext,
   PropsWithChildren,
-  useEffect,
 } from 'react';
-import * as Keychain from 'react-native-keychain';
 
 interface IAuthState {
-  user: Models.User | null;
   authenticated: boolean;
+  user: Models.User | null;
   accessToken: string | null;
   refreshToken: string | null;
 }
