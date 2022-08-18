@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import { useState } from 'react';
 
 import isEmailValid from '../utils/isEmailValid';
 import { capitalize, XLibError } from '../utils/errors';
@@ -26,11 +26,9 @@ type FormChangeHandler<T> = (name: keyof T) => (value: string) => void;
 
 type FormValue<T extends FormDescription> = {
   state: FormState<T>;
-  errors: FormErrorState<FormState<T>>;
-  defaultErrors: FormErrorState<FormState<T>>;
-  handleFormChange: FormChangeHandler<FormState<T>>;
-  setErrors: Dispatch<SetStateAction<FormErrorState<FormState<T>>>>;
   handleSubmit: () => void;
+  errors: FormErrorState<FormState<T>>;
+  handleFormChange: FormChangeHandler<FormState<T>>;
 };
 
 function validate<T extends FormDescription>(
@@ -105,10 +103,8 @@ export default function useForm<T extends FormDescription>(
   return {
     state,
     errors,
-    defaultErrors,
-    handleFormChange,
-    setErrors,
     handleSubmit,
+    handleFormChange,
   };
 }
 
