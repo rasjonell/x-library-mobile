@@ -8,6 +8,12 @@ import { SERVER_URL as BASE_URL } from '@env';
 
 import { AuthContext, defaultAuthState } from './Auth';
 import { userFromResponse } from '../api/auth';
+import {
+  BadRequestError,
+  NotFoundError,
+  UnauthorizedError,
+  UnprocessableEntityError,
+} from '../utils/errors';
 
 interface IAxiosContext {
   AuthAPI: AxiosInstance;
@@ -35,9 +41,28 @@ const AxiosProvider = ({ children }: PropsWithChildren) => {
       return response;
     },
     (error: any) => {
-      if (error.response.status === 401) {
-        authContext.setAuthState(defaultAuthState);
+      const response = error.response as AxiosErrorResponse['response'];
+      const errorMessage = response.data.errors.detail;
+      const changesetErrors = response.data.errors.error;
+
+      switch (response.status) {
+        case 401:
+          authContext.setAuthState(defaultAuthState);
+          throw new UnauthorizedError(errorMessage);
+
+        case 404:
+          throw new NotFoundError(errorMessage);
+
+        case 400:
+          throw new BadRequestError(errorMessage);
+
+        case 422:
+          throw new UnprocessableEntityError(errorMessage, changesetErrors);
+
+        default:
+          break;
       }
+
       return error;
     },
   ];
@@ -58,9 +83,7 @@ const AxiosProvider = ({ children }: PropsWithChildren) => {
   AuthAPI.interceptors.response.use(...unauthorizedInterceptors);
   PublicAPI.interceptors.response.use(...unauthorizedInterceptors);
 
-  const refreshAuthLogic = async (failedRequest: any) => {
-    console.warn('FAILED REQUEST', failedRequest);
-
+  const refreshAuthLogic = async () => {
     const data = {
       refresh: authContext.authState.refreshToken,
     };
