@@ -1,9 +1,10 @@
 import { AxiosResponse } from 'axios';
 import * as Keychain from 'react-native-keychain';
 
+import useToast from '../hooks/useToast';
+import { XLibError } from '../utils/errors';
 import { useAxios } from '../context/Axios';
 import { IAuthContext, useAuth } from '../context/Auth';
-import useToast from '../hooks/useToast';
 
 export function userFromResponse(response: AxiosResponse): Models.User {
   const {
@@ -44,9 +45,15 @@ async function updateAuthState(auth: IAuthContext, response: AxiosResponse) {
 export const useSignIn = () => {
   const { PublicAPI } = useAxios();
   const auth = useAuth();
-  const toast = useToast();
+  const toast = useToast('auth');
 
-  return async ({ email, password }: { email: string; password: string }) => {
+  return async ({
+    email,
+    password,
+  }: {
+    email: string;
+    password: string;
+  }): Promise<XLibError | null> => {
     try {
       const response = await PublicAPI.post('/users/signin', {
         user: {
@@ -57,6 +64,7 @@ export const useSignIn = () => {
 
       if (response.data.token) {
         updateAuthState(auth, response);
+
         toast({
           isClosable: true,
           status: 'success',
@@ -65,15 +73,19 @@ export const useSignIn = () => {
           description: 'Enjoy Your Experience with X-Library',
         });
       }
+
+      return null;
     } catch (error) {
       toast({
         status: 'error',
         isClosable: true,
         variant: 'left-accent',
         title: 'Unexpected Error',
-        description: 'Unable To Sign You In. Please Try Again',
+        description:
+          'Unable To Sign You In. Please Correct Errors and Try Again',
       });
-      console.warn('[SIGN IN] error', error);
+
+      return error as XLibError;
     }
   };
 };
@@ -81,7 +93,7 @@ export const useSignIn = () => {
 export const useSignUp = () => {
   const { PublicAPI } = useAxios();
   const auth = useAuth();
-  const toast = useToast();
+  const toast = useToast('auth');
 
   return async (user: { name: string; email: string; password: string }) => {
     try {
@@ -100,7 +112,12 @@ export const useSignUp = () => {
         });
       }
     } catch (error) {
-      console.warn('[SIGN UP] error', error);
+      const normalizedError = error as XLibError;
+
+      if (normalizedError.changesetErrors) {
+        return normalizedError;
+      }
+
       toast({
         status: 'error',
         isClosable: true,
@@ -115,7 +132,7 @@ export const useSignUp = () => {
 export const useSignOut = () => {
   const { AuthAPI } = useAxios();
   const auth = useAuth();
-  const toast = useToast();
+  const toast = useToast('auth');
 
   return async () => {
     try {
@@ -132,7 +149,6 @@ export const useSignOut = () => {
         });
       }
     } catch (error) {
-      console.warn('[SIGN OUT] error', error);
       toast({
         status: 'error',
         isClosable: true,
@@ -152,7 +168,6 @@ export function useGetProfile() {
       const response = await AuthAPI.get('/users/me');
       return userFromResponse(response);
     } catch (error) {
-      console.warn('[GET PROFILE] error', error);
       return null;
     }
   };

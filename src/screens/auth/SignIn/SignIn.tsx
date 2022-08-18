@@ -1,17 +1,18 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import {
-  Button,
-  FormControl,
-  Input,
   Link,
   Text,
+  Input,
   VStack,
+  Button,
+  FormControl,
   WarningOutlineIcon,
 } from 'native-base';
 import React, { useState } from 'react';
 
 import { useSignIn } from '../../../api/auth';
+import { XLibError } from '../../../utils/errors';
 import { SafeAreaView } from '../../../components/SafeAreaView';
 import formValidator, { IFormErrorState } from '../helpers/formValidator';
 
@@ -22,9 +23,13 @@ const defaultErrorState = {
 
 function SignIn() {
   const signIn = useSignIn();
+  const [show, setShow] = useState(false);
   const navigator = useNavigation<NativeStackNavigationProp<any>>();
 
-  const [show, setShow] = useState(false);
+  const [signInError, setSignInError] = useState<XLibError['message'] | null>(
+    null,
+  );
+
   const [errorState, setErrorState] =
     useState<IFormErrorState>(defaultErrorState);
 
@@ -34,13 +39,16 @@ function SignIn() {
     setFormState({ ...formState, [name]: value });
   };
 
-  const handleSignIn = () => {
+  const handleSignIn = async () => {
+    setSignInError(null);
     const errors = formValidator(formState);
+
     if (Object.values(errors).some(value => !!value)) {
       setErrorState(errors);
     } else {
       setErrorState(defaultErrorState);
-      signIn(formState);
+      const requestError = await signIn(formState);
+      setSignInError(requestError ? requestError.message : null);
     }
   };
 
@@ -72,13 +80,15 @@ function SignIn() {
           </FormControl.ErrorMessage>
         </FormControl>
 
-        <FormControl isRequired isInvalid={!!errorState.password}>
+        <FormControl
+          isRequired
+          isInvalid={!!(errorState.password || signInError)}>
           <Input
             size="lg"
             variant="rounded"
             autoCapitalize="none"
             value={formState.password}
-            mb={errorState.password ? 0 : 5}
+            mb={errorState.password || signInError ? 0 : 5}
             type={show ? 'text' : 'password'}
             placeholder="Enter your password"
             onChangeText={handleFormChange('password')}
@@ -96,7 +106,7 @@ function SignIn() {
           <FormControl.ErrorMessage
             mb={5}
             leftIcon={<WarningOutlineIcon size="xs" />}>
-            {errorState.password}
+            {errorState.password || signInError}
           </FormControl.ErrorMessage>
         </FormControl>
 

@@ -43,13 +43,20 @@ function SignUp() {
       setFormState({ ...formState, [name]: value });
     };
 
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
     const errors = formValidator(formState);
     if (Object.values(errors).some(value => !!value)) {
       setErrorState(errors);
     } else {
-      signUp(formState);
-      setErrorState(defaultErrorState);
+      const requestError = await signUp(formState);
+      if (requestError?.changesetErrors) {
+        setErrorState({
+          ...defaultErrorState,
+          email: requestError.changesetErrors.email,
+        });
+      } else {
+        setErrorState(defaultErrorState);
+      }
     }
   };
 
