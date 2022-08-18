@@ -1,5 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import React from 'react';
 import {
   Link,
   Text,
@@ -10,93 +9,58 @@ import {
   WarningOutlineIcon,
   TextArea,
 } from 'native-base';
-import React, { useState } from 'react';
+
+import useForm from '../../../hooks/useForm';
 import { useSignUp } from '../../../api/auth';
+import useToggle from '../../../hooks/useToggle';
+import useNavigate from '../../../hooks/useNavigate';
+
 import { SafeAreaView } from '../../../components/SafeAreaView';
 
-import formValidator, { IFormErrorState } from '../helpers/formValidator';
-
-const defaultErrorState: IFormErrorState = {
-  bio: null,
-  name: null,
-  email: null,
-  password: null,
-};
-
 function SignUp() {
-  const navigator = useNavigation<NativeStackNavigationProp<any>>();
-
   const signUp = useSignUp();
-  const [show, setShow] = useState(false);
-  const [formState, setFormState] = useState({
-    bio: '',
-    name: '',
-    email: '',
-    password: '',
-  });
+  const [show, toggleShow] = useToggle();
+  const navigateToSignIn = useNavigate('Sign In');
 
-  const [errorState, setErrorState] =
-    useState<IFormErrorState>(defaultErrorState);
-
-  const handleFormChange =
-    (name: keyof typeof formState) => (value: string) => {
-      setFormState({ ...formState, [name]: value });
-    };
-
-  const handleSignUp = async () => {
-    const errors = formValidator(formState);
-    if (Object.values(errors).some(value => !!value)) {
-      setErrorState(errors);
-    } else {
-      const requestError = await signUp(formState);
-      if (requestError?.changesetErrors) {
-        setErrorState({
-          ...defaultErrorState,
-          email: requestError.changesetErrors.email,
-        });
-      } else {
-        setErrorState(defaultErrorState);
-      }
-    }
-  };
-
-  const handleShow = () => {
-    setShow(!show);
-  };
-
-  const handleSignIn = () => {
-    navigator.navigate('Sign In');
-  };
+  const { state, errors, handleFormChange, handleSubmit } = useForm(
+    {
+      email: { type: 'email' },
+      name: { type: 'text', min: 2 },
+      password: { type: 'text', min: 6 },
+      bio: { type: 'text', min: 3, max: 150 },
+    },
+    signUp,
+  );
 
   return (
     <SafeAreaView>
       <VStack paddingX={10} mt={3} h="100%" justifyContent="center">
-        <FormControl isRequired isInvalid={!!errorState.name}>
+        <FormControl isRequired isInvalid={!!errors.name}>
           <FormControl.Label>Your Name</FormControl.Label>
           <Input
             size="lg"
             isRequired
             variant="rounded"
             autoCapitalize="none"
-            value={formState.name}
+            value={state.name}
             placeholder="Enter your name"
             onChangeText={handleFormChange('name')}
           />
           <FormControl.ErrorMessage
             mb={3}
             leftIcon={<WarningOutlineIcon size="xs" />}>
-            {errorState.name}
+            {errors.name}
           </FormControl.ErrorMessage>
         </FormControl>
 
-        <FormControl isRequired isInvalid={!!errorState.bio}>
+        <FormControl isRequired isInvalid={!!errors.bio}>
           <FormControl.Label>Your Bio</FormControl.Label>
           <TextArea
             size="lg"
             isRequired
             borderRadius="2xl"
             autoCapitalize="none"
-            value={formState.bio}
+            value={state.bio}
             autoCompleteType="off"
             placeholder="Tell us about yourself"
             onChangeText={handleFormChange('bio')}
@@ -104,36 +68,36 @@ function SignUp() {
           <FormControl.ErrorMessage
             mb={3}
             leftIcon={<WarningOutlineIcon size="xs" />}>
-            {errorState.bio}
+            {errors.bio}
           </FormControl.ErrorMessage>
         </FormControl>
 
-        <FormControl isRequired isInvalid={!!errorState.email}>
+        <FormControl isRequired isInvalid={!!errors.email}>
           <FormControl.Label>Email</FormControl.Label>
           <Input
             size="lg"
             isRequired
             variant="rounded"
             autoCapitalize="none"
-            value={formState.email}
+            value={state.email}
             placeholder="Enter your email"
             onChangeText={handleFormChange('email')}
           />
           <FormControl.ErrorMessage
             mb={3}
             leftIcon={<WarningOutlineIcon size="xs" />}>
-            {errorState.email}
+            {errors.email}
           </FormControl.ErrorMessage>
         </FormControl>
 
-        <FormControl isRequired isInvalid={!!errorState.password}>
+        <FormControl isRequired isInvalid={!!errors.password}>
           <FormControl.Label>Password</FormControl.Label>
           <Input
             size="lg"
             variant="rounded"
             autoCapitalize="none"
-            value={formState.password}
-            mb={errorState.password ? 0 : 5}
+            value={state.password}
+            mb={errors.password ? 0 : 5}
             type={show ? 'text' : 'password'}
             placeholder="Enter your password"
             onChangeText={handleFormChange('password')}
@@ -143,7 +107,7 @@ function SignUp() {
                 h="full"
                 size="xs"
                 rounded="none"
-                onPress={handleShow}>
+                onPress={toggleShow}>
                 {show ? 'Hide' : 'Show'}
               </Button>
             }
@@ -151,15 +115,16 @@ function SignUp() {
           <FormControl.ErrorMessage
             mb={5}
             leftIcon={<WarningOutlineIcon size="xs" />}>
-            {errorState.password}
+            {errors.password}
           </FormControl.ErrorMessage>
         </FormControl>
 
-        <Button borderRadius="full" onPress={handleSignUp}>
+        <Button borderRadius="full" onPress={handleSubmit}>
           Sign Up
         </Button>
         <Text fontSize="xs" mt={2} textAlign="center">
-          Already have an account? <Link onPress={handleSignIn}>Sign In</Link>
+          Already have an account?{' '}
+          <Link onPress={navigateToSignIn}>Sign In</Link>
         </Text>
       </VStack>
     </SafeAreaView>
