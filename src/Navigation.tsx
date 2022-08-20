@@ -7,12 +7,36 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { useAuth } from './context/Auth';
 
-import { Profile } from './screens/Profile';
-import { SignIn } from './screens/auth/SignIn';
-import { SignUp } from './screens/auth/SignUp';
+import { BookScreen } from './screens/Book';
+import { ProfileScreen } from './screens/Profile';
+import { SignInScreen } from './screens/auth/SignIn';
+import { SignUpScreen } from './screens/auth/SignUp';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
+
+export type NavigatorParamList = AppNavigatorParamList &
+  MainNavigatorParamList &
+  AuthNavigatorParamList;
+
+export type AppNavigatorParamList = {
+  Main: undefined;
+  Book: {
+    bookId: Models.Book['id'];
+    title: Models.Book['title'];
+  };
+};
+
+export type MainNavigatorParamList = {
+  Home: undefined;
+  Search: undefined;
+  Profile: undefined;
+};
+
+export type AuthNavigatorParamList = {
+  SignIn: undefined;
+  SignUp: undefined;
+};
 
 const MainNavigator = () => (
   <Tab.Navigator
@@ -20,14 +44,14 @@ const MainNavigator = () => (
     screenOptions={{ headerShown: false }}>
     <Tab.Screen
       name="Home"
-      component={Profile}
+      component={ProfileScreen}
       options={{
         tabBarIcon: props => <Icon as={<AntIcons name="home" />} {...props} />,
       }}
     />
     <Tab.Screen
       name="Search"
-      component={Profile}
+      component={ProfileScreen}
       options={{
         tabBarIcon: props => (
           <Icon as={<AntIcons name="search1" />} {...props} />
@@ -36,7 +60,7 @@ const MainNavigator = () => (
     />
     <Tab.Screen
       name="Profile"
-      component={Profile}
+      component={ProfileScreen}
       options={{
         tabBarIcon: props => <Icon as={<AntIcons name="user" />} {...props} />,
       }}
@@ -44,19 +68,39 @@ const MainNavigator = () => (
   </Tab.Navigator>
 );
 
+const AppNavigator = () => (
+  <Stack.Navigator
+    initialRouteName="Main"
+    screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="Main" component={MainNavigator} />
+    <Stack.Screen
+      name="Book"
+      component={BookScreen}
+      options={({ route }) => {
+        const params = route.params as NavigatorParamList['Book'];
+
+        return {
+          headerShown: true,
+          title: params.title,
+        };
+      }}
+    />
+  </Stack.Navigator>
+);
+
 const AuthNavigator = () => (
   <Stack.Navigator
-    initialRouteName="Sign In"
+    initialRouteName="SignIn"
     screenOptions={{ headerShown: true }}>
-    <Stack.Screen name="Sign In" component={SignIn} />
-    <Stack.Screen name="Sign Up" component={SignUp} />
+    <Stack.Screen name="SignIn" component={SignInScreen} />
+    <Stack.Screen name="SignUp" component={SignUpScreen} />
   </Stack.Navigator>
 );
 
 function DefaultNavigation() {
   const { authState } = useAuth();
 
-  return authState.authenticated ? <MainNavigator /> : <AuthNavigator />;
+  return authState.authenticated ? <AppNavigator /> : <AuthNavigator />;
 }
 
 export default DefaultNavigation;

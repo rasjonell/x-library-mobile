@@ -19,8 +19,9 @@ import { SafeAreaView } from '../../../components/SafeAreaView';
 
 function SignUp() {
   const signUp = useSignUp();
+  const navigator = useNavigate();
   const [show, toggleShow] = useToggle();
-  const navigateToSignIn = useNavigate('Sign In');
+  const navigateToSignIn = () => navigator.navigate('SignIn');
 
   const { state, errors, handleFormChange, handleSubmit } = useForm(
     {

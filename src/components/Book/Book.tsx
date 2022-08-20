@@ -1,15 +1,24 @@
 import React from 'react';
-import { Alert } from 'react-native';
 import { HStack, Icon, Text } from 'native-base';
 import AntIcons from 'react-native-vector-icons/AntDesign';
 
 import { Card } from '../Card';
+import { useNavigation } from '@react-navigation/native';
+import { AppNavigatorParamList } from '../../Navigation';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 interface BookProps {
   book: Models.Book;
 }
 
 const Book = ({ book }: BookProps) => {
+  const navigator =
+    useNavigation<NativeStackNavigationProp<AppNavigatorParamList>>();
+
+  const navigateToBook = () => {
+    navigator.navigate('Book', { bookId: book.id, title: book.title });
+  };
+
   const starColor =
     book.rating < 2
       ? 'danger.500'
@@ -36,25 +45,12 @@ const Book = ({ book }: BookProps) => {
     </HStack>
   );
 
-  const onBookPress = () => {
-    Alert.alert(
-      'Not Implemented',
-      'This action is not implemented yet. Please try again later',
-      [
-        {
-          text: 'Okay',
-          style: 'cancel',
-        },
-      ],
-    );
-  };
-
   return (
     <Card
       clickable
       title={book.title}
-      onPress={onBookPress}
       leftAction={leftAction}
+      onPress={navigateToBook}
       rightAction={rightAction}
       description={book.description}
       subtitle={book.authors.join(', ')}
