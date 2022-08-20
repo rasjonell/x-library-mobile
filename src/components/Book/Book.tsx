@@ -5,17 +5,11 @@ import AntIcons from 'react-native-vector-icons/AntDesign';
 
 import { Card } from '../Card';
 
-import truncate from '../helpers/truncate';
-
 interface BookProps {
   book: Models.Book;
 }
 
 const Book = ({ book }: BookProps) => {
-  const title = truncate(book.title, 40);
-  const subtitle = truncate(book.authors, 30);
-  const description = truncate(book.description, 80);
-
   const starColor =
     book.rating < 2
       ? 'danger.500'
@@ -58,12 +52,12 @@ const Book = ({ book }: BookProps) => {
   return (
     <Card
       clickable
-      title={title}
-      subtitle={subtitle}
+      title={book.title}
       onPress={onBookPress}
       leftAction={leftAction}
-      description={description}
       rightAction={rightAction}
+      description={book.description}
+      subtitle={book.authors.join(', ')}
     />
   );
 };

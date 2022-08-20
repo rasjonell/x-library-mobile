@@ -42,7 +42,7 @@ function Card({
         borderColor="primary.200">
         <VStack p="4" space="lg" h="full" justifyContent="space-between">
           <Stack space={2}>
-            <Heading size="sm" ml="-1">
+            <Heading ml="-1" size="sm" noOfLines={1}>
               {title}
             </Heading>
             <Text
@@ -50,10 +50,11 @@ function Card({
               ml="-0.5"
               fontSize="xs"
               fontWeight="500"
+              noOfLines={1}
               color="violet.500">
               {subtitle}
             </Text>
-            <Text fontWeight="light" fontSize="xs">
+            <Text fontWeight="light" fontSize="xs" noOfLines={4}>
               {description}
             </Text>
           </Stack>
