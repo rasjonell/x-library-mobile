@@ -13,7 +13,6 @@ declare namespace Models {
     id: string;
     isbn: string;
     title: string;
-    price: number;
     rating: number;
     authors: string[];
     description: string;
@@ -28,6 +27,7 @@ declare namespace Models {
     bio: string;
     name: string;
     email: string;
+    averageRating: number;
 
     // Associations
     reviews?: Review[];

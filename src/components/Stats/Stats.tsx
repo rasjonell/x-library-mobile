@@ -36,35 +36,27 @@ const IndividualStat = ({ label, value }: IndividualStatProps) => (
 );
 
 const RatingStat = ({
-  userReviews,
+  averageRating,
 }: {
-  userReviews: Models.User['reviews'];
-}) => {
-  const averageRating =
-    userReviews && userReviews.length > 0
-      ? userReviews.reduce((prev, curr) => prev + curr.rating, 0) /
-        userReviews.length
-      : 0;
-
-  return (
-    <IndividualStat
-      label="Average Rating"
-      value={
-        <Flex direction="row" alignItems="center" justifyContent="center">
-          <Icon
-            mr={2}
-            size="xl"
-            color="primary.500"
-            as={<AntIcons name="star" />}
-          />
-          <Text fontWeight="extrabold" fontSize="2xl" color="primary.500">
-            {averageRating.toFixed(1)}
-          </Text>
-        </Flex>
-      }
-    />
-  );
-};
+  averageRating: Models.User['averageRating'];
+}) => (
+  <IndividualStat
+    label="Average Rating"
+    value={
+      <Flex direction="row" alignItems="center" justifyContent="center">
+        <Icon
+          mr={2}
+          size="xl"
+          color="primary.500"
+          as={<AntIcons name="star" />}
+        />
+        <Text fontWeight="extrabold" fontSize="2xl" color="primary.500">
+          {averageRating ? averageRating.toFixed(1) : 'N/A'}
+        </Text>
+      </Flex>
+    }
+  />
+);
 
 const Stats = ({ user }: StatsProps) => {
   const reviews = user.reviews ? user.reviews.length : 0;
@@ -75,7 +67,7 @@ const Stats = ({ user }: StatsProps) => {
       <VerticalDivider />
       <IndividualStat label="Reviews" value={reviews} />
       <VerticalDivider />
-      <RatingStat userReviews={user.reviews} />
+      <RatingStat averageRating={user.averageRating} />
     </Flex>
   );
 };

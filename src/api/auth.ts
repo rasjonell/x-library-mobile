@@ -14,6 +14,7 @@ export function userFromResponse(response: AxiosResponse): Models.User {
     email,
     reviews,
     books_read: booksRead,
+    average_rating: averageRating,
   } = response.data;
 
   return {
@@ -23,6 +24,7 @@ export function userFromResponse(response: AxiosResponse): Models.User {
     email,
     reviews,
     booksRead,
+    averageRating,
   };
 }
 

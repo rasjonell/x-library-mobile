@@ -19,7 +19,7 @@ function Profile() {
   if (!user) {
     return (
       <SafeAreaView>
-        <Text>Loading ...</Text>
+        <Text>Loading...</Text>
       </SafeAreaView>
     );
   }
