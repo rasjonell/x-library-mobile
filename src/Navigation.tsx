@@ -8,6 +8,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useAuth } from './context/Auth';
 
 import { BookScreen } from './screens/Book';
+import { SearchScreen } from './screens/Search';
 import { ProfileScreen } from './screens/Profile';
 import { SignInScreen } from './screens/auth/SignIn';
 import { SignUpScreen } from './screens/auth/SignUp';
@@ -51,7 +52,7 @@ const MainNavigator = () => (
     />
     <Tab.Screen
       name="Search"
-      component={ProfileScreen}
+      component={SearchScreen}
       options={{
         tabBarIcon: props => (
           <Icon as={<AntIcons name="search1" />} {...props} />
