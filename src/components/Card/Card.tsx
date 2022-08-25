@@ -1,4 +1,5 @@
 import { Box, Heading, Stack, VStack, Text, HStack } from 'native-base';
+import { InterfaceBoxProps } from 'native-base/lib/typescript/components/primitives/Box';
 import React, { ReactNode } from 'react';
 import { TouchableOpacity } from 'react-native';
 
@@ -8,6 +9,7 @@ interface DefaultCardProps {
   description: string;
   leftAction: ReactNode;
   rightAction: ReactNode;
+  width?: InterfaceBoxProps['maxW'];
 }
 
 interface InactiveCardProps extends DefaultCardProps {
@@ -29,16 +31,18 @@ function Card({
   leftAction,
   rightAction,
   description,
+  width = null,
   clickable = false,
 }: InactiveCardProps | ActionableCardProps): JSX.Element {
   const CardContent = (
     <Box alignItems="center" m={3}>
       <Box
         h="200"
-        maxW="250"
+        w={width}
         rounded="lg"
         borderWidth="2"
         overflow="scroll"
+        maxW={width || '250'}
         borderColor="primary.200">
         <VStack p="4" space="lg" h="full" justifyContent="space-between">
           <Stack space={2}>
@@ -49,16 +53,20 @@ function Card({
               mt="-1"
               ml="-0.5"
               fontSize="xs"
-              fontWeight="500"
               noOfLines={1}
+              fontWeight="500"
               color="violet.500">
               {subtitle}
             </Text>
-            <Text fontWeight="light" fontSize="xs" noOfLines={4}>
+            <Text
+              fontSize="xs"
+              noOfLines={4}
+              fontWeight="light"
+              textTransform="capitalize">
               {description}
             </Text>
           </Stack>
-          <HStack alignItems="center" justifyContent="space-between">
+          <HStack alignItems="center" justifyContent="space-between" px={1}>
             {leftAction}
             {rightAction}
           </HStack>

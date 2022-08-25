@@ -1,19 +1,18 @@
 import React from 'react';
 import { HStack, Icon, Text } from 'native-base';
 import AntIcons from 'react-native-vector-icons/AntDesign';
+import { InterfaceBoxProps } from 'native-base/lib/typescript/components/primitives/Box';
 
 import { Card } from '../Card';
-import { useNavigation } from '@react-navigation/native';
-import { AppNavigatorParamList } from '../../Navigation';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import useNavigate from '../../hooks/useNavigate';
 
 interface BookProps {
   book: Models.Book;
+  width?: InterfaceBoxProps['maxW'];
 }
 
-const Book = ({ book }: BookProps) => {
-  const navigator =
-    useNavigation<NativeStackNavigationProp<AppNavigatorParamList>>();
+const Book = ({ book, width = null }: BookProps) => {
+  const navigator = useNavigate();
 
   const navigateToBook = () => {
     navigator.navigate('Book', { bookId: book.id, title: book.title });
@@ -23,8 +22,8 @@ const Book = ({ book }: BookProps) => {
     book.rating < 2
       ? 'danger.500'
       : book.rating < 5
-      ? 'primary.500'
-      : 'success.500';
+      ? 'violet.500'
+      : 'yellow.500';
 
   const leftAction = (
     <HStack alignItems="center">
@@ -48,6 +47,7 @@ const Book = ({ book }: BookProps) => {
   return (
     <Card
       clickable
+      width={width}
       title={book.title}
       leftAction={leftAction}
       onPress={navigateToBook}

@@ -1,18 +1,41 @@
 import React from 'react';
 import { Flex, Text } from 'native-base';
 
-interface EmptyProps {
-  title: string;
+interface DefaultEmptyProps {
+  center?: boolean;
   messages: string[];
 }
 
-const Empty = ({ title, messages }: EmptyProps) => (
+interface WithTitleEmptyProps extends DefaultEmptyProps {
+  title: string;
+  noTitle?: false;
+}
+
+interface NoTitleEmptyProps extends DefaultEmptyProps {
+  noTitle: true;
+  title?: never;
+}
+
+const Empty = ({
+  title,
+  messages,
+  center = false,
+  noTitle = false,
+}: WithTitleEmptyProps | NoTitleEmptyProps) => (
   <Flex direction="column" mx={5} my={2}>
-    <Text fontWeight="extrabold" fontSize="xl" textAlign="left">
-      {title}
-    </Text>
+    {noTitle ? null : (
+      <Text
+        fontSize="xl"
+        fontWeight="extrabold"
+        textAlign={center ? 'center' : 'left'}>
+        {title}
+      </Text>
+    )}
     {messages.map(message => (
-      <Text key={message} fontWeight="light">
+      <Text
+        key={message}
+        fontWeight="light"
+        textAlign={center ? 'center' : 'left'}>
         {message}
       </Text>
     ))}
