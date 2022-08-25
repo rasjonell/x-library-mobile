@@ -1,4 +1,23 @@
 declare namespace Models {
+  namespace OpenLibrary {
+    type WorkID = string;
+    type DocKey = `/works/${WorkID}`;
+
+    interface DocResponse {
+      key: DocKey;
+      title: string;
+      subject?: string[];
+      publisher?: string[];
+      author_name?: string[];
+      first_publish_year: number;
+    }
+
+    interface Doc extends DocResponse {
+      subject: string[];
+      publisher: string[];
+      author_name: string[];
+    }
+  }
   interface Review {
     id: string;
     rating: number;
