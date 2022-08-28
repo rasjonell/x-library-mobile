@@ -19,9 +19,12 @@ Cross-Platform Mobile Client for the [X-Library](https://github.com/rasjonell/x-
 
 # Available Screens
 
-## Profile
-![Profile](./screenshots/profile.png)
+Profile             |  Search
+:-------------------------:|:-------------------------:
+![](./screenshots/profile.png)  |  ![](./screenshots/search.png)
 
 ## Authentication
-![Sign In](./screenshots/signin.png)
-![Sign Up](./screenshots/signup.png)
+
+Sign In             |  Sign Up
+:-------------------------:|:-------------------------:
+![](./screenshots/signin.png)  |  ![](./screenshots/signup.png)
