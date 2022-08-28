@@ -62,7 +62,7 @@ const Stats = ({ user }: StatsProps) => {
   const reviews = user.reviews ? user.reviews.length : 0;
   const booksRead = user.booksRead ? user.booksRead.length : 0;
   return (
-    <Flex direction="row" p={1}>
+    <Flex direction="row" p={1} borderBottomWidth="1" borderColor="muted.100">
       <IndividualStat label="Books Read" value={booksRead} />
       <VerticalDivider />
       <IndividualStat label="Reviews" value={reviews} />

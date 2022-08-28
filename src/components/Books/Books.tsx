@@ -10,7 +10,7 @@ interface BooksProps {
 
 const Books = ({ books }: BooksProps) =>
   books && books.length > 0 ? (
-    <Flex direction="column" alignItems="flex-start" h="250">
+    <Flex direction="column" alignItems="flex-start" h="250" my={5}>
       <Text fontWeight="extrabold" fontSize="xl" textAlign="left" ml={5}>
         Your Books
       </Text>
