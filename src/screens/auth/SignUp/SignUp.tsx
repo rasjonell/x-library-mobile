@@ -18,7 +18,7 @@ import useNavigate from '../../../hooks/useNavigate';
 import { SafeAreaView } from '../../../components/SafeAreaView';
 import { KeyboardView } from '../../../components/KeyboardView';
 
-function SignUp() {
+const SignUp = () => {
   const signUp = useSignUp();
   const navigator = useNavigate();
   const [show, toggleShow] = useToggle();
@@ -133,6 +133,6 @@ function SignUp() {
       </KeyboardView>
     </SafeAreaView>
   );
-}
+};
 
 export default SignUp;

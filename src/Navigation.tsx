@@ -98,10 +98,10 @@ const AuthNavigator = () => (
   </Stack.Navigator>
 );
 
-function DefaultNavigation() {
+const DefaultNavigation = () => {
   const { authState } = useAuth();
 
   return authState.authenticated ? <AppNavigator /> : <AuthNavigator />;
-}
+};
 
 export default DefaultNavigation;

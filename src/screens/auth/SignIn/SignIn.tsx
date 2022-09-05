@@ -17,7 +17,7 @@ import useNavigate from '../../../hooks/useNavigate';
 import { SafeAreaView } from '../../../components/SafeAreaView';
 import { KeyboardView } from '../../../components/KeyboardView';
 
-function SignIn() {
+const SignIn = () => {
   const signIn = useSignIn();
   const [show, toggleShow] = useToggle();
   const navigator = useNavigate();
@@ -91,6 +91,6 @@ function SignIn() {
       </KeyboardView>
     </SafeAreaView>
   );
-}
+};
 
 export default SignIn;

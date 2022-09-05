@@ -6,7 +6,7 @@ import { XLibError } from '../utils/errors';
 import { useAxios } from '../context/Axios';
 import { IAuthContext, useAuth } from '../context/Auth';
 
-export function userFromResponse(response: AxiosResponse): Models.User {
+export const userFromResponse = (response: AxiosResponse): Models.User => {
   const {
     id,
     bio,
@@ -26,9 +26,9 @@ export function userFromResponse(response: AxiosResponse): Models.User {
     booksRead,
     averageRating,
   };
-}
+};
 
-async function updateAuthState(auth: IAuthContext, response: AxiosResponse) {
+const updateAuthState = async (auth: IAuthContext, response: AxiosResponse) => {
   const { refresh, token } = response.data;
   const user = userFromResponse(response);
 
@@ -42,7 +42,7 @@ async function updateAuthState(auth: IAuthContext, response: AxiosResponse) {
   auth.setAuthState(authState);
 
   await Keychain.setGenericPassword('token', JSON.stringify(authState));
-}
+};
 
 export const useSignIn = () => {
   const auth = useAuth();
@@ -168,7 +168,7 @@ export const useSignOut = () => {
   };
 };
 
-export function useGetProfile() {
+export const useGetProfile = (): (() => Promise<Models.User | null>) => {
   const { AuthAPI } = useAxios();
 
   return async () => {
@@ -179,4 +179,4 @@ export function useGetProfile() {
       return null;
     }
   };
-}
+};

@@ -49,12 +49,12 @@ export class InternalServerError extends BaseError {
   }
 }
 
-export function buildErrorMessage(errors: ErrorResponseData): string[] {
+export const buildErrorMessage = (errors: ErrorResponseData): string[] => {
   return Object.entries(errors.error).map(
     ([key, value]) => `${capitalize(key)} ${value}`,
   );
-}
+};
 
-export function capitalize(word: string): string {
+export const capitalize = (word: string): string => {
   return `${word[0].toUpperCase()}${word.substring(1)}`;
-}
+};

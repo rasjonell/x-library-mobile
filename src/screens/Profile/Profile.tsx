@@ -10,7 +10,7 @@ import { Avatar } from '../../components/Avatar';
 import { Reviews } from '../../components/Reviews';
 import { SafeAreaView } from '../../components/SafeAreaView';
 
-function Profile() {
+const Profile = () => {
   const {
     authState: { user },
   } = useAuth();
@@ -51,6 +51,6 @@ function Profile() {
       </VStack>
     </SafeAreaView>
   );
-}
+};
 
 export default Profile;

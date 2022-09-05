@@ -16,7 +16,7 @@ type UseSearchReturn = [
   },
 ];
 
-export default function useSearch(): UseSearchReturn {
+const useSearch = (): UseSearchReturn => {
   const searchBooks = useSearchQuery();
   const [query, setQuery] = useState<string>('');
   const debouncedQuery = useDebounce(query, 600);
@@ -44,4 +44,6 @@ export default function useSearch(): UseSearchReturn {
     onQueryChange,
     { data, isLoading, isError },
   ];
-}
+};
+
+export default useSearch;

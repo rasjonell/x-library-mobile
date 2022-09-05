@@ -4,7 +4,7 @@ import { useToast as useNativeToast } from 'native-base';
 import { ToastAlert } from '../components/ToastAlert';
 import { ToastAlertProps } from '../components/ToastAlert/ToastAlert';
 
-export default function useToast(id: string) {
+const useToast = (id: string) => {
   const toast = useNativeToast();
 
   return (props: Omit<ToastAlertProps, 'onClose'>) => {
@@ -15,4 +15,6 @@ export default function useToast(id: string) {
       });
     }
   };
-}
+};
+
+export default useToast;

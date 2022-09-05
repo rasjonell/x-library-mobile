@@ -3,6 +3,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { NavigatorParamList } from '../Navigation';
 
-export default function useNavigate() {
-  return useNavigation<NativeStackNavigationProp<NavigatorParamList>>();
-}
+const useNavigate = () =>
+  useNavigation<NativeStackNavigationProp<NavigatorParamList>>();
+
+export default useNavigate;

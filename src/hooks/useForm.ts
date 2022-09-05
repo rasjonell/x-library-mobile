@@ -31,10 +31,10 @@ type FormValue<T extends FormDescription> = {
   handleFormChange: FormChangeHandler<FormState<T>>;
 };
 
-function validate<T extends FormDescription>(
+const validate = <T extends FormDescription>(
   formOptions: FullFormDescription<FormDescription>,
   state: FormState<typeof formOptions>,
-) {
+) => {
   let hasError = false;
 
   const errors = Object.entries(formOptions).reduce(
@@ -64,12 +64,71 @@ function validate<T extends FormDescription>(
     boolean,
     FormErrorState<FormState<FullFormDescription<T>>>,
   ];
-}
+};
 
-export default function useForm<T extends FormDescription>(
+const buildFullFormOptions = <T extends FormDescription>(
+  formOptions: T,
+): FullFormDescription<T> => {
+  const fullFormOptions = Object.entries(formOptions).reduce(
+    (prev, [field, options]) => ({
+      ...prev,
+      [field]: {
+        ...options,
+        min: options.min || 0,
+        max: options.max || Infinity,
+      },
+    }),
+    {},
+  );
+
+  return fullFormOptions as FullFormDescription<T>;
+};
+
+const buildDefaultState = <T extends FullFormDescription<FormDescription>>(
+  formOptions: T,
+): FormState<T> => {
+  const defaultState = Object.keys(formOptions).reduce(
+    (prev, key) => ({ ...prev, [key]: '' }),
+    {},
+  );
+
+  return defaultState as FormState<T>;
+};
+
+const buildDefaultErrors = <T extends object>(
+  defaultState: T,
+): FormErrorState<T> => {
+  const defaultErrors = Object.keys(defaultState).reduce(
+    (prev, key) => ({ ...prev, [key]: null }),
+    {},
+  );
+
+  return defaultErrors as FormErrorState<T>;
+};
+
+const buildLengthErrorMessage = (
+  field: string,
+  options: Required<FieldOptions>,
+): string => {
+  if (options.min === 0 && options.max === Infinity) {
+    return `${capitalize(field)} is required`;
+  }
+
+  if (options.min > 0 && options.max === Infinity) {
+    return `${capitalize(field)} must be at least ${
+      options.min
+    } characters long`;
+  }
+
+  return `${capitalize(field)} must be between ${options.min} and ${
+    options.max
+  } characters long`;
+};
+
+const useForm = <T extends FormDescription>(
   formOptions: T,
   action: (state: FormState<T>) => Promise<XLibError | null> | void,
-): FormValue<T> {
+): FormValue<T> => {
   const fullFormOptions = buildFullFormOptions(formOptions);
 
   const defaultState = buildDefaultState(fullFormOptions);
@@ -106,61 +165,6 @@ export default function useForm<T extends FormDescription>(
     handleSubmit,
     handleFormChange,
   };
-}
+};
 
-function buildFullFormOptions<T extends FormDescription>(
-  formOptions: T,
-): FullFormDescription<T> {
-  const fullFormOptions = Object.entries(formOptions).reduce(
-    (prev, [field, options]) => ({
-      ...prev,
-      [field]: {
-        ...options,
-        min: options.min || 0,
-        max: options.max || Infinity,
-      },
-    }),
-    {},
-  );
-
-  return fullFormOptions as FullFormDescription<T>;
-}
-
-function buildDefaultState<T extends FullFormDescription<FormDescription>>(
-  formOptions: T,
-): FormState<T> {
-  const defaultState = Object.keys(formOptions).reduce(
-    (prev, key) => ({ ...prev, [key]: '' }),
-    {},
-  );
-
-  return defaultState as FormState<T>;
-}
-
-function buildDefaultErrors<T>(defaultState: T): FormErrorState<T> {
-  const defaultErrors = Object.keys(defaultState).reduce(
-    (prev, key) => ({ ...prev, [key]: null }),
-    {},
-  );
-
-  return defaultErrors as FormErrorState<T>;
-}
-
-function buildLengthErrorMessage(
-  field: string,
-  options: Required<FieldOptions>,
-): string {
-  if (options.min === 0 && options.max === Infinity) {
-    return `${capitalize(field)} is required`;
-  }
-
-  if (options.min > 0 && options.max === Infinity) {
-    return `${capitalize(field)} must be at least ${
-      options.min
-    } characters long`;
-  }
-
-  return `${capitalize(field)} must be between ${options.min} and ${
-    options.max
-  } characters long`;
-}
+export default useForm;

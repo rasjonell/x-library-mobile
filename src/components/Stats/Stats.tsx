@@ -1,6 +1,8 @@
 import React, { ReactNode } from 'react';
-import { Text, Flex, Divider, Icon } from 'native-base';
+import { Text, Flex, Icon } from 'native-base';
 import AntIcons from 'react-native-vector-icons/AntDesign';
+
+import { VerticalDivider } from '../VerticalDivider';
 
 interface StatsProps {
   user: Models.User;
@@ -10,17 +12,6 @@ interface IndividualStatProps {
   label: string;
   value: number | ReactNode;
 }
-
-const VerticalDivider = () => (
-  <Divider
-    mx={1}
-    h="50%"
-    m="auto"
-    thickness={2}
-    bg="muted.100"
-    orientation="vertical"
-  />
-);
 
 const IndividualStat = ({ label, value }: IndividualStatProps) => (
   <Flex direction="column" padding={5} alignItems="center">

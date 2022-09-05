@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function useToggle(): [boolean, () => void] {
+const useToggle = (): [boolean, () => void] => {
   const [state, setState] = React.useState<boolean>(false);
 
   const toggle = () => {
@@ -8,4 +8,6 @@ export default function useToggle(): [boolean, () => void] {
   };
 
   return [state, toggle];
-}
+};
+
+export default useToggle;
