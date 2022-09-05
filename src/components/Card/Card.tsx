@@ -37,7 +37,7 @@ const Card = ({
       <Box
         h="200"
         w={width}
-        rounded="lg"
+        rounded="2xl"
         borderWidth="2"
         overflow="scroll"
         maxW={width || '250'}

@@ -6,6 +6,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import { AVATAR_API_KEY } from '@env';
 
 interface AvatarProps {
+  mt?: number;
   seed: string;
   action?: {
     title: string;
@@ -15,7 +16,7 @@ interface AvatarProps {
   };
 }
 
-const Avatar = ({ seed, action }: AvatarProps) => {
+const Avatar = ({ seed, action, mt }: AvatarProps) => {
   const uri = `https://api.multiavatar.com/${seed}.png?apikey=${AVATAR_API_KEY}`;
 
   const handleActionClick = () => {
@@ -33,7 +34,7 @@ const Avatar = ({ seed, action }: AvatarProps) => {
   };
 
   return (
-    <NBAvatar size="2xl" mt={5} bg="indigo.500" source={{ uri }}>
+    <NBAvatar size="2xl" mt={mt ?? 5} bg="indigo.500" source={{ uri }}>
       {action ? (
         <NBAvatar.Badge
           bg="primary.500"
