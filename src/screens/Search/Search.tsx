@@ -1,11 +1,12 @@
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import { Input, VStack, Icon, Spinner, Center, ScrollView } from 'native-base';
+import { Input, VStack, Icon, Center, ScrollView } from 'native-base';
 
-import useSearch from '../../hooks/useSearch';
+import useSearch from '../../api/hooks/useSearch';
 
 import { Empty } from '../../components/Empty';
+import { Loading } from '../../components/Loading';
 import { SearchResult } from '../../components/SearchResult';
 import { SafeAreaView } from '../../components/SafeAreaView';
 
@@ -28,11 +29,7 @@ const Search = () => {
 
   const renderResults = () => {
     if (isLoading) {
-      return (
-        <Center h="full">
-          <Spinner size="lg" color="purple.500" />
-        </Center>
-      );
+      return <Loading />;
     }
 
     if (!data) {
