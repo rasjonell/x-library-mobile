@@ -12,6 +12,20 @@ export const useUserReviews = () => {
   });
 };
 
+export const useBook = () => {
+  const { AuthAPI } = useAxios();
+
+  return async (id: string): Promise<Required<Models.Book> | null> => {
+    try {
+      const result = await AuthAPI.get(`/books/${id}`);
+      return result.data.data;
+    } catch (error) {
+      console.warn(error);
+      return null;
+    }
+  };
+};
+
 export const useSearch = () => {
   const { PublicAPI } = useAxios();
   const queryClient = useQueryClient();
