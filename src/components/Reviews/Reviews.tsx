@@ -12,7 +12,7 @@ const Reviews = ({ reviews }: ReviewsProps) =>
   reviews && reviews.length > 0 ? (
     <Flex direction="column" alignItems="flex-start" h="250">
       <Text fontWeight="extrabold" fontSize="xl" textAlign="left" ml={5}>
-        Your Reviews
+        Reviews
       </Text>
       <ScrollView horizontal>
         {reviews.map(review => (
@@ -24,8 +24,8 @@ const Reviews = ({ reviews }: ReviewsProps) =>
     <Empty
       title="Your Reviews"
       messages={[
-        "You currently don't have any reviews.",
-        'When you add a review to any book, they will appear here',
+        'Oops! Looks like there are no reviews for the moment',
+        'When you add a review, they will appear here',
       ]}
     />
   );

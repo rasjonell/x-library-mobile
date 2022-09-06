@@ -43,7 +43,7 @@ const Profile = () => {
         <Text fontWeight="light" fontSize="lg" textAlign="center">
           {user.bio}
         </Text>
-        <Stats user={user} />
+        <Stats entity={user} />
         <ScrollView h="full">
           <Books books={user.booksRead} />
           <Reviews reviews={user.reviews} />

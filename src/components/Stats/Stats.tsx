@@ -5,7 +5,7 @@ import AntIcons from 'react-native-vector-icons/AntDesign';
 import { VerticalDivider } from '../VerticalDivider';
 
 interface StatsProps {
-  user: Models.User;
+  entity: Models.User | Models.Book;
 }
 
 interface IndividualStatProps {
@@ -49,16 +49,31 @@ const RatingStat = ({
   />
 );
 
-const Stats = ({ user }: StatsProps) => {
-  const reviews = user.reviews ? user.reviews.length : 0;
-  const booksRead = user.booksRead ? user.booksRead.length : 0;
+const Stats = ({ entity }: StatsProps) => {
+  const isUser = 'booksRead' in entity;
+  const reviews = entity.reviews ? entity.reviews.length : 0;
+  const booksRead = isUser
+    ? entity.booksRead
+      ? entity.booksRead.length
+      : 0
+    : 'read_by' in entity
+    ? entity.read_by
+      ? entity.read_by.length
+      : 0
+    : 0;
+
+  const averageRating =
+    'rating' in entity ? entity.rating : entity.averageRating;
+
+  const readerLabel = isUser ? 'Books Read' : 'Read By';
+
   return (
     <Flex direction="row" p={1} borderBottomWidth="1" borderColor="muted.100">
-      <IndividualStat label="Books Read" value={booksRead} />
+      <IndividualStat label={readerLabel} value={booksRead} />
+      <VerticalDivider />
+      <RatingStat averageRating={averageRating} />
       <VerticalDivider />
       <IndividualStat label="Reviews" value={reviews} />
-      <VerticalDivider />
-      <RatingStat averageRating={user.averageRating} />
     </Flex>
   );
 };
