@@ -1,16 +1,16 @@
 import React from 'react';
-import { Flex, Text, ScrollView } from 'native-base';
+import { Text, ScrollView, VStack } from 'native-base';
 
 import { Empty } from '../Empty';
 import { Review } from '../Review';
 
 interface ReviewsProps {
-  reviews: Models.User['reviews'];
+  reviews: Models.Review[];
 }
 
 const Reviews = ({ reviews }: ReviewsProps) =>
   reviews && reviews.length > 0 ? (
-    <Flex direction="column" alignItems="flex-start" h="250">
+    <VStack alignItems="flex-start" h="250">
       <Text fontWeight="extrabold" fontSize="xl" textAlign="left" ml={5}>
         Reviews
       </Text>
@@ -19,7 +19,7 @@ const Reviews = ({ reviews }: ReviewsProps) =>
           <Review review={review} key={review.id} />
         ))}
       </ScrollView>
-    </Flex>
+    </VStack>
   ) : (
     <Empty
       title="Your Reviews"

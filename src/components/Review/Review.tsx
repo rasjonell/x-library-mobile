@@ -18,9 +18,8 @@ const Review = ({ review }: ReviewProps) => {
   } = useAuth();
 
   const navigateToReview = () => {
-    navigator.navigate('Book', {
-      bookId: review.book_id,
-      title: review.content,
+    navigator.navigate('Review', {
+      reviewId: review.id,
     });
   };
 

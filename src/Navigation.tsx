@@ -8,6 +8,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useAuth } from './context/Auth';
 
 import { BookScreen } from './screens/Book';
+import { ReviewScreen } from './screens/Review';
 import { SearchScreen } from './screens/Search';
 import { ProfileScreen } from './screens/Profile';
 import { SignInScreen } from './screens/auth/SignIn';
@@ -25,6 +26,9 @@ export type AppNavigatorParamList = {
   Book: {
     bookId: Models.Book['id'];
     title: Models.Book['title'];
+  };
+  Review: {
+    reviewId: Models.Review['id'];
   };
 };
 
@@ -85,6 +89,11 @@ const AppNavigator = () => (
           title: params.title,
         };
       }}
+    />
+    <Stack.Screen
+      name="Review"
+      component={ReviewScreen}
+      options={{ headerShown: true }}
     />
   </Stack.Navigator>
 );
