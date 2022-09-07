@@ -26,6 +26,8 @@ declare namespace Models {
     // Associations
     book_id: Book['id'];
     user_id: User['id'];
+    book?: Book;
+    user?: User;
   }
 
   interface Book {

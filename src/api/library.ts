@@ -26,6 +26,20 @@ export const useBook = () => {
   };
 };
 
+export const useReview = () => {
+  const { AuthAPI } = useAxios();
+
+  return async (id: string): Promise<Required<Models.Review> | null> => {
+    try {
+      const result = await AuthAPI.get(`/reviews/${id}`);
+      return result.data;
+    } catch (error) {
+      console.warn(error);
+      return null;
+    }
+  };
+};
+
 export const useSearch = () => {
   const { PublicAPI } = useAxios();
   const queryClient = useQueryClient();
